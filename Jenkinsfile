@@ -42,6 +42,7 @@ pipeline {
   }
   
   environment {
+    CYPRESS_PROJECT_ID = credentials('CYPRESS_PROJECT_ID')
     CYPRESS_RECORD_KEY = credentials('CYPRESS_RECORD_KEY')
     HOME = '.'
   }
@@ -71,11 +72,6 @@ pipeline {
     // this stage runs end-to-end tests, and each agent uses the workspace
     // from the previous stage
     stage('cypress parallel tests') {
-      environment {
-        // because parallel steps share the workspace they might race to delete
-        // screenshots and videos folders. Tell Cypress not to delete these folders
-        CYPRESS_trashAssetsBeforeRuns = 'false'
-      }
 
       // https://jenkins.io/doc/book/pipeline/syntax/#parallel
       parallel {
