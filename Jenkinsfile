@@ -40,6 +40,11 @@ pipeline {
       image 'cypress/base:10'
     }
   }
+  
+  environment {
+    CYPRESS_RECORD_KEY = credentials('CYPRESS_RECORD_KEY')
+    HOME = '.'
+  }
 
   stages {
     // first stage installs node dependencies and Cypress binary
@@ -67,11 +72,6 @@ pipeline {
     // from the previous stage
     stage('cypress parallel tests') {
       environment {
-        // we will be recording test results and video on Cypress dashboard
-        // to record we need to set an environment variable
-        // we can load the record key variable from credentials store
-        // see https://jenkins.io/doc/book/using/using-credentials/
-        CYPRESS_RECORD_KEY = credentials('cypress-example-kitchensink-record-key')
         // because parallel steps share the workspace they might race to delete
         // screenshots and videos folders. Tell Cypress not to delete these folders
         CYPRESS_trashAssetsBeforeRuns = 'false'
